@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Stack } from 'react-bootstrap';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ import { Routes } from './Routes';
 import axios from 'axios';
 
 export const api = axios.create({
-    baseURL: "https://localhost:5001"
+    baseURL: "https://localhost:443"
 });
 
 export default function App() {

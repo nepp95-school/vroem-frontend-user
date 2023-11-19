@@ -1,13 +1,14 @@
 import axios from "axios";
 import React from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap"
+import { Button, Col, Container, Form, FormText, Row } from "react-bootstrap"
 import { api } from "../App";
 
 export class Login extends React.Component
 {
     state = {
         username: null,
-        password: null
+        password: null,
+        msg: null,
     }
 
     setUsername = (username) =>
@@ -24,6 +25,13 @@ export class Login extends React.Component
         }))
     }
 
+    setMsg = (msg) =>
+    {
+        this.setState(state => ({
+            msg: msg
+        }))
+    }
+
     onFormSubmit = (event) =>
     {
         event.preventDefault();
@@ -32,7 +40,13 @@ export class Login extends React.Component
             Username: this.state.username,
             Password: this.state.password
         }).then(response => {
-            console.log(response.data);
+            if (response.data.Id <= 0)
+                this.setMsg("Foutieve gegevens ingevuld.");
+            else
+            {
+                document.cookie = "JwtToken=" + response.data.Token + "; path=/; secure; HttpOnly; SameSite=Strict";
+                console.log(response.data.Token);
+            }
         }, []);
     }
 
@@ -44,6 +58,8 @@ export class Login extends React.Component
                     <h3 className="text-center">Inloggen</h3>
                     <Col sm={{ span: 4, offset: 4 }}>
                         <Form onSubmit={ this.onFormSubmit }>
+                            { this.state.msg && <FormText>{ this.state.msg }</FormText> }
+
                             <Form.Group className="mb-3" controlId="username">
                                 <Form.Label>Gebruikersnaam</Form.Label>
                                 <Form.Control type="text" placeholder="Gebruikersnaam" onChange={ e => this.setUsername(e.target.value) } />
